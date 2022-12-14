@@ -9,18 +9,18 @@ app.get("/", (req, res) => {
 });
 
 app.get("/update", (req, res) => {
-    
-    const {title, description} = res.query;
+
+    const { title, description } = res.query;
     let qry = "update test set title=?, description=?";
 
-    mysql.query(qry,[title, description],(err, result) => {
-        if(err) thorw err
+    mysql.query(qry, [title, description], (err, result) => {
+        if (err) throw err
     })
 });
 
-app.get("addtitle", (req, res) => {
-    const {title, description } = req.query
- 
+app.get("/addtitle", (req, res) => {
+    const { title, description } = req.query
+
     let qry = "select * from ayush where title=? or description=?";
     mysql.query(qry, [title, description], (err, results) => {
         if (err)
@@ -28,22 +28,24 @@ app.get("addtitle", (req, res) => {
         else {
             if (result.length > 0) {
 
-            }else 
+            } else{
 
-            let qry2 = "insert into test values(?,?,?,?)";
+                let qry2 = "insert into test values(?,?,?,?)";
             mysql.query(qry2, [title, description], (err, results) => {
                 if (results.affectedRows > 0) {
                     res.render("add", { mesg: true })
+                }
+            })
         }
-    })
-
-
+    }
+})
 });
 
 
-app.listen(port, (err) => {
-    if (err)
-    throw err
-    else
-      console.log("server is running at port %d:", port);
-});
+
+    app.listen(port, (err) => {
+        if (err)
+            throw err
+        else
+            console.log("server is running at port %d:", port);
+    });
